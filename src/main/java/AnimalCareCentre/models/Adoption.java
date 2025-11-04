@@ -31,11 +31,12 @@ public class Adoption {
   @ManyToOne
   @JoinColumn(name = "animal_id")
   private ShelterAnimal animal;
-  private LocalDate date;
+  private LocalDate requestDate;
+  private LocalDate adoptionDate;
   @Enumerated(EnumType.STRING)
   private AdoptionType type;
-  @Column (nullable = false)
-  private boolean acceptance;
+  @Enumerated(EnumType.STRING)
+  private RequestStatus status;
 
   /**
    * Constructor of class Adoption.
@@ -49,13 +50,14 @@ public class Adoption {
     this.user = user;
     this.animal = animal;
     this.type = type;
-    date = LocalDate.now();
-    acceptance = false;
+    requestDate = LocalDate.now();
+    status = RequestStatus.PENDING;
+
   }
 
   public Adoption() {}
 
-  // Getters area
+  // Getters and setters area
   public User getUser() {
     return user;
   }
@@ -64,21 +66,21 @@ public class Adoption {
     return animal;
   }
 
-  public LocalDate getDate() {
-    return date;
-  }
+  public LocalDate getRequestDate() { return requestDate; }
+
+  public LocalDate getAdoptionDate() { return adoptionDate; }
+
+  public void setAdoptionDate(LocalDate adoptionDate) { this.adoptionDate = adoptionDate; }
+
+  public RequestStatus getStatus() { return status; }
+
+  public void setStatus(RequestStatus status) { this.status = status; }
 
   public AdoptionType getType() {
     return type;
   }
 
-  public boolean isAcceptance() {
-    return acceptance;
-  }
 
-  public void setAcceptance(boolean acceptance) {
-    this.acceptance = acceptance;
-  }
 
     @Override
     public String toString() {
@@ -86,8 +88,8 @@ public class Adoption {
                 "id=" + id +
                 ", user=" + user +
                 ", animal=" + animal.getName() +
-                ", date=" + date +
-                ", status=" + acceptance +
+                ", date of request =" + requestDate +
+                ", status=" + status +
                 '}';
     }
 }
