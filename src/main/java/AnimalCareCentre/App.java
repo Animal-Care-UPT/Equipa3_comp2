@@ -512,7 +512,7 @@ public class App extends Application {
           }
 
           case 3 -> {
-              List<Adoption> adoptions = manager.getAdoptionsByUser((User) loggedAcc);
+              List<Adoption> adoptions = manager.getAdoptionsByUser((User) loggedAcc, AdoptionType.FOR_ADOPTION);
 
               if(adoptions.size() == 0) {
                   System.out.println("Sorry, no adopt requests found!");
@@ -529,7 +529,7 @@ public class App extends Application {
               }
           }
           case 4 -> {
-              List<Adoption> fosters = manager.getFostersByUser((User) loggedAcc);
+              List<Adoption> fosters = manager.getAdoptionsByUser((User) loggedAcc, AdoptionType.FOR_FOSTER);
 
               if(fosters.size() == 0) {
                   System.out.println("Sorry, no foster requests found!");
