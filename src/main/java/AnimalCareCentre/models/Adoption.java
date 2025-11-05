@@ -31,9 +31,12 @@ public class Adoption {
   @ManyToOne
   @JoinColumn(name = "animal_id")
   private ShelterAnimal animal;
-  private LocalDate date;
+  private LocalDate requestDate;
+  private LocalDate adoptionDate;
   @Enumerated(EnumType.STRING)
   private AdoptionType type;
+  @Enumerated(EnumType.STRING)
+  private RequestStatus status;
 
   /**
    * Constructor of class Adoption.
@@ -47,12 +50,14 @@ public class Adoption {
     this.user = user;
     this.animal = animal;
     this.type = type;
-    date = LocalDate.now();
+    requestDate = LocalDate.now();
+    status = RequestStatus.PENDING;
+
   }
 
   public Adoption() {}
 
-  // Getters area
+  // Getters and setters area
   public User getUser() {
     return user;
   }
@@ -61,16 +66,30 @@ public class Adoption {
     return animal;
   }
 
-  public LocalDate getDate() {
-    return date;
-  }
+  public LocalDate getRequestDate() { return requestDate; }
+
+  public LocalDate getAdoptionDate() { return adoptionDate; }
+
+  public void setAdoptionDate(LocalDate adoptionDate) { this.adoptionDate = adoptionDate; }
+
+  public RequestStatus getStatus() { return status; }
+
+  public void setStatus(RequestStatus status) { this.status = status; }
 
   public AdoptionType getType() {
     return type;
   }
 
-  @Override
-  public String toString() {
-    return "\nAdoption Date: " + date + "\nType: " + type + "\nUser: " + user + "\nDog Name: " + animal.getName();
-  }
+
+
+    @Override
+    public String toString() {
+        return "Adoption{" +
+                "id=" + id +
+                ", user=" + user +
+                ", animal=" + animal.getName() +
+                ", date of request =" + requestDate +
+                ", status=" + status +
+                '}';
+    }
 }

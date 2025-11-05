@@ -358,13 +358,14 @@ public class App extends Application {
 
       case 2 -> {
         manager.adoptAnimal((User) loggedAcc, animal, AdoptionType.FOR_ADOPTION);
-        System.out.println("Congratulationssss!!!!! You just adopted " + animal.getName());
+        System.out.println("Congratulations! Your request to adopt " + animal.getName() + " has been submitted!");
       }
 
       case 3 -> {
         manager.adoptAnimal((User) loggedAcc, animal, AdoptionType.FOR_FOSTER);
-        System.out.println("Congratulationssss!!!!! You just fostered" + animal.getName());
+        System.out.println("Congratulations! Your request to foster " + animal.getName() + " has been submitted!");
       }
+
 
       case 0 -> {
         userHomepage();
@@ -491,8 +492,9 @@ public class App extends Application {
         System.out.println("=== USER MENU ===");
         System.out.println("1. Search Animal");
         System.out.println("2. Search Shelter");
-        System.out.println("3. See My Adoptions");
-        System.out.println("4 Lost and Found");
+        System.out.println("3. See My Adoptions Requests");
+        System.out.println("4. See My Foster Requests");
+        System.out.println("5 Lost and Found");
         System.out.println("0. Logout");
         System.out.print("Option: ");
         option = sc.nextInt();
@@ -510,14 +512,45 @@ public class App extends Application {
           }
 
           case 3 -> {
-            System.out.println(manager.getUserAdoptions((User) loggedAcc));
-            userHomepage();
-            return;
+              List<Adoption> adoptions = manager.getAdoptionsByUser((User) loggedAcc);
+
+              if(adoptions.size() == 0) {
+                  System.out.println("Sorry, no adopt requests found!");
+                  userHomepage();
+                  return;
+              }
+
+              else{
+                  for(Adoption adopt : adoptions) {
+                      System.out.println(adopt.toString() + "\n");
+                  }
+                  userHomepage();
+                  return;
+              }
           }
           case 4 -> {
-            lostAndFoundMenu();
-            return;
+              List<Adoption> fosters = manager.getFostersByUser((User) loggedAcc);
+
+              if(fosters.size() == 0) {
+                  System.out.println("Sorry, no foster requests found!");
+                  userHomepage();
+                  return;
+              }
+
+              else{
+                  for(Adoption f : fosters) {
+                      System.out.println(f.toString() + "\n");
+                  }
+                  userHomepage();
+                  return;
+              }
           }
+
+            case 5 -> {
+                lostAndFoundMenu();
+                return;
+            }
+
 
           case 0 -> {
             System.out.println("Exiting terminal menu...");

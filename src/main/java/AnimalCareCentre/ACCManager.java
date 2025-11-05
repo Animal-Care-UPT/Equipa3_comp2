@@ -28,8 +28,6 @@ public class ACCManager {
   public void adoptAnimal(User user, ShelterAnimal animal, AdoptionType type) {
     session.beginTransaction();
     Adoption adopt = new Adoption(user, animal, type);
-    animal.setListedFor(AdoptionType.NOT_AVAILABLE);
-    session.merge(animal);
     session.persist(adopt);
     session.getTransaction().commit();
   }
@@ -157,6 +155,28 @@ public class ACCManager {
       e.printStackTrace();
     }
   }
+
+  //Method to view Adoption request from the user's perspective
+    public List<Adoption> getAdoptionsByUser (User user) {
+      session.beginTransaction();
+      Query<Adoption> query = session.createQuery("FROM Adoption WHERE user = :user AND type = :type", Adoption.class);
+      query.setParameter("user", user);
+      query.setParameter("type", AdoptionType.FOR_ADOPTION);
+      List<Adoption> adoptions = query.getResultList();
+      session.getTransaction().commit();
+      return adoptions;
+    }
+
+    //Method to view Foster request from the user's perspective
+    public List<Adoption> getFostersByUser (User user) {
+        session.beginTransaction();
+        Query<Adoption> query = session.createQuery("FROM Adoption WHERE user = :user AND type = :type", Adoption.class);
+        query.setParameter("user", user);
+        query.setParameter("type", AdoptionType.FOR_FOSTER);
+        List<Adoption> fosters = query.getResultList();
+        session.getTransaction().commit();
+        return fosters;
+    }
 
   public List<ShelterAnimal> getAvailableAnimalsByShelter(Shelter shelter) {
     session.beginTransaction();
