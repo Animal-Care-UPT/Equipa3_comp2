@@ -45,6 +45,17 @@ public class ACCManager {
     return query.getResultList();
   }
 
+  public List<ShelterAnimal> viewAllAnimals() {
+    Query<ShelterAnimal> query = session.createQuery("FROM ShelterAnimal", ShelterAnimal.class);
+    return query.getResultList();
+  }
+
+  public List<Adoption> viewAllAdoptions(AdoptionType type) {
+    Query<Adoption> query = session.createQuery("FROM Adoption WHERE type = :type", Adoption.class);
+    query.setParameter("type", type);
+    return query.getResultList();
+  }
+
   /**
    * This method searches animals by a keyword
    *
@@ -64,8 +75,14 @@ public class ACCManager {
     return query.getResultList();
   }
 
+  public List<Sponsorship> viewAllSponsorships() {
+    Query<Sponsorship> query = session.createQuery("FROM Sponsorship", Sponsorship.class);
+    return query.getResultList();
+  }
+
   public List<Shelter> searchShelters() {
-    Query<Shelter> query = session.createQuery("FROM Shelter", Shelter.class);
+    Query<Shelter> query = session.createQuery("FROM Shelter WHERE status = :status", Shelter.class);
+    query.setParameter("status", Status.ACCEPTED);
     return query.getResultList();
   }
 
@@ -113,6 +130,19 @@ public class ACCManager {
     } else {
       return null;
     }
+  }
+
+  public List<Shelter> showShelterRequests() {
+    Query<Shelter> query = session.createQuery("FROM Shelter WHERE status = :status", Shelter.class);
+    query.setParameter("status", Status.PENDING);
+    return query.getResultList();
+  }
+  
+  public void changeShelterStatus(Shelter shelter, Status status) {
+    session.beginTransaction();
+    shelter.setStatus(status);
+    session.merge(shelter);
+    session.getTransaction().commit();
   }
 
   public void createUserAccount(String name, String email, String password, String location,

@@ -528,8 +528,13 @@ public class App extends Application {
         int option;
 
         System.out.println("=== ADMIN MENU ===");
-        System.out.println("1. Search Animal");
-        System.out.println("5 Lost and Found");
+        System.out.println("1. View Shelter Requests");
+        System.out.println("2. View Available Shelters");
+        System.out.println("3. View All Sponsorships");
+        System.out.println("4. View All Animals");
+        System.out.println("5. View All Adoptions");
+        System.out.println("6. View All Fosters");
+        System.out.println("7 Lost and Found");
         System.out.println("0. Logout");
         System.out.print("Option: ");
         option = sc.nextInt();
@@ -537,51 +542,76 @@ public class App extends Application {
 
         switch (option) {
           case 1 -> {
-            searchAnimalMenu();
+            List<Shelter> shelters = manager.showShelterRequests();
+            Shelter choice = (Shelter) chooseOption(shelters.toArray(), "Shelter Request");
+            if (choice == null) {
+              javafx.application.Platform.runLater(this::adminHomePage);
+              return;
+            }
+            String[] requestAction = { "Accept", "Reject" };
+            String action = (String) chooseOption(requestAction, "Shelter Request");
+            if (action == null) {
+              javafx.application.Platform.runLater(this::adminHomePage);
+              return;
+            }
+            if (action.equals("Accept")) {
+              manager.changeShelterStatus(choice, Status.ACCEPTED);
+              System.out.println("Shelter accepted");
+            } else {
+              manager.changeShelterStatus(choice, Status.REJECTED);
+              System.out.println("Shelter rejected");
+            }
+            adminHomePage();
             return;
           }
 
           case 2 -> {
-            searchShelter();
+            List<Shelter> shelters = manager.searchShelters();
+            Shelter choice = (Shelter) chooseOption(shelters.toArray(), "Shelter");
+            if (choice == null) {
+              javafx.application.Platform.runLater(this::adminHomePage);
+              return;
+            }
+            String[] requestAction = {"Ban Shelter, View info"};
+            String action = (String) chooseOption(requestAction, "Shelter");
+            if (action == null) {
+              javafx.application.Platform.runLater(this::adminHomePage);
+              return;
+            }
+            if (action.equals("Ban Shelter")) {
+              manager.changeShelterStatus(choice, Status.BANNED);
+            } else {
+              System.out.println(choice); // for now it only prints shelter info
+            }
+            adminHomePage();
             return;
           }
 
           case 3 -> {
-            List<Adoption> adoptions = manager.getAdoptionsByUser((User) loggedAcc, AdoptionType.FOR_ADOPTION);
-
-            if (adoptions.size() == 0) {
-              System.out.println("Sorry, no adopt requests found!");
-              userHomepage();
-              return;
-            }
-
-            else {
-              for (Adoption adopt : adoptions) {
-                System.out.println(adopt.toString() + "\n");
-              }
-              userHomepage();
-              return;
-            }
+            System.out.println(manager.viewAllSponsorships());
+            adminHomePage();
+            return;
           }
+
           case 4 -> {
-            List<Adoption> fosters = manager.getAdoptionsByUser((User) loggedAcc, AdoptionType.FOR_FOSTER);
-
-            if (fosters.size() == 0) {
-              System.out.println("Sorry, no foster requests found!");
-              userHomepage();
-              return;
-            }
-
-            else {
-              for (Adoption f : fosters) {
-                System.out.println(f.toString() + "\n");
-              }
-              userHomepage();
-              return;
-            }
+            System.out.println(manager.viewAllAnimals());
+            adminHomePage();
+            return;
+          }
+          
+          case 5 -> {
+            System.out.println(manager.viewAllAdoptions(AdoptionType.FOR_ADOPTION));
+            adminHomePage();
+            return;
           }
 
-          case 5 -> {
+          case 6 -> {
+            System.out.println(manager.viewAllAdoptions(AdoptionType.FOR_FOSTER));
+            adminHomePage();
+            return;
+          }
+
+          case 7 -> {
             lostAndFoundMenu();
             return;
           }

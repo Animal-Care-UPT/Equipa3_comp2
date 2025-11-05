@@ -22,7 +22,7 @@ public class Shelter extends Account {
   private boolean isVerified;
   private Status status;
   @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Animal> animals = new ArrayList<>();
+  private List<ShelterAnimal> animals = new ArrayList<>();
 
   /**
    * Constructor for the class Shelter
@@ -61,6 +61,10 @@ public class Shelter extends Account {
 
   public boolean getVerification() {
     return isVerified;
+  }
+
+  public void setStatus(Status status) {
+      this.status = status;
   }
 
   @Override
