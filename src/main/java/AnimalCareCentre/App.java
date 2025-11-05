@@ -159,22 +159,22 @@ public class App extends Application {
     accType.getItems().addAll("User", "Admin", "Shelter");
     Label nameLabel = new Label("Name:");
     TextField name = new TextField();
-    name.setMaxWidth(150);
+    name.setMaxWidth(250);
     Label emailLabel = new Label("Email:");
     TextField email = new TextField();
     email.setMaxWidth(250);
     Label passLabel = new Label("Password:");
     PasswordField password = new PasswordField();
-    password.setMaxWidth(150);
+    password.setMaxWidth(250);
     Label locationLabel = new Label("Location:");
     TextField location = new TextField();
-    location.setMaxWidth(150);
+    location.setMaxWidth(250);
     Label secLabel = new Label("Security Question:");
     ComboBox<SecurityQuestion> sec = new ComboBox<>();
     sec.getItems().addAll(SecurityQuestion.values());
     Label answerLabel = new Label("Answer:");
     TextField answer = new TextField();
-    answer.setMaxWidth(200);
+    answer.setMaxWidth(250);
 
     VBox vbox = new VBox();
     vbox.setAlignment(Pos.CENTER_LEFT);
@@ -185,14 +185,18 @@ public class App extends Application {
     vbox.setSpacing(10);
     scene.addItems(vbox);
 
+    PasswordField adminCode = new PasswordField();
+    adminCode.setMaxWidth(250);
     Label birthLabel = new Label("Birthdate:");
     DatePicker birthDate = new DatePicker();
+    birthDate.setMaxWidth(250);
     Label contactLabel = new Label("Contact:");
     TextField contact = new TextField();
-    contact.setMaxWidth(150);
+    contact.setMaxWidth(250);
     Label foundYear = new Label("Foundation year:");
     TextField year = new TextField();
-    year.setMaxWidth(80);
+    year.setMaxWidth(250);
+    Label adminLabel = new Label("Admin code:");
 
     year.setTextFormatter(new TextFormatter<>(change -> {
       String num = change.getControlNewText();
@@ -258,8 +262,14 @@ public class App extends Application {
 
         if (sec.getValue() == null
             || !manager.validateFields(name.getText(), email.getText(), password.getText(), location.getText(),
-                sec.getValue().toString(), answer.getText())) {
+                sec.getValue().toString(), answer.getText(), adminCode.getText())) {
           showAlert(AlertType.ERROR, "Empty Fields!", "All fields are required!");
+          return;
+        }
+
+        if (!adminCode.getText().equals("lasagna")) {
+          showAlert(AlertType.ERROR, "Wrong Admin Code", "The Admin code is wrong! Returning...");
+          showMainMenu();
           return;
         }
 
@@ -303,6 +313,8 @@ public class App extends Application {
         vbox.getChildren().addAll(birthLabel, birthDate, contactLabel, contact);
       } else if (selected.equals("Shelter")) {
         vbox.getChildren().addAll(contactLabel, contact, foundYear, year);
+      } else {
+        vbox.getChildren().addAll(adminLabel, adminCode);
       }
     });
 
