@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
@@ -84,8 +85,8 @@ public class ACCScene extends Scene {
   /**
    * This method adds items to the navigation bar of the app.
    */
-  public void setHeader(String ... items) {
-    for (String item: items) {
+  public void setHeader(String... items) {
+    for (String item : items) {
       ACCNavButton navButton = new ACCNavButton(item);
       header.addItems(navButton);
     }

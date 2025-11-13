@@ -54,9 +54,12 @@ public class App extends Application {
    */
   public void showMainMenu() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
-    Button login = new Button("Login");
-    Button create = new Button("Create Account");
-    Button exit = new Button("Exit");
+
+    // DELETE THIS COMMENT LATER
+    // only changed these buttons to get feedback for later, this is component 3 as well
+    ACCButton login = new ACCButton("Login");
+    ACCButton create = new ACCButton("Create Account");
+    ACCButton exit = new ACCButton("Exit");
 
     login.setOnAction(e -> {
       login();
