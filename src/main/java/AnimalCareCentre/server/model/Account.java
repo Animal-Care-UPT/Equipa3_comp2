@@ -1,6 +1,5 @@
 package AnimalCareCentre.server.model;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +38,8 @@ public class Account {
   private SecurityQuestion securityQuestion;
   private String answer;
   @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List <LostAnimal> lostAnimals = new ArrayList <>();
+  private List<LostAnimal> lostAnimals = new ArrayList<>();
+
   /**
    * Constructor for class Account.
    *
@@ -95,13 +95,12 @@ public class Account {
   public void setSecurityQuestion(SecurityQuestion securityQuestion) {
     this.securityQuestion = securityQuestion;
   }
-  
-  
-public long getId() {
-	return id;
-}
 
-// toString from the class Account
+  public long getId() {
+    return id;
+  }
+
+  // toString from the class Account
   @Override
   public String toString() {
     return "Name: " + name + "\nLocation: " + location;

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import AnimalCareCentre.server.service.UserService;
 
 @RestController
-@RequestMapping("/accounts/")
+@RequestMapping("/users/")
 public class UserController {
 
   private final UserService userService;
