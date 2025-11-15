@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import AnimalCareCentre.server.service.SponsorshipService;
 
 @RestController
-@RequestMapping("/accounts/")
+@RequestMapping("/sponsorships/")
 public class SponsorshipController {
 
   private final SponsorshipService sponsorshipService;
