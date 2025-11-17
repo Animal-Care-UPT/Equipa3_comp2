@@ -8,6 +8,9 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * This class describes the model of a Shelter.
@@ -17,7 +20,12 @@ import jakarta.persistence.Table;
 @Table(name = "Shelters")
 public class Shelter extends Account {
 
+  @NotNull(message = "Foundation Year is mandatory!")
+  @Min(value = 1900, message = "Must enter a valid year!")
   private Integer foundationYear;
+  @NotNull(message = "Contact is mandatory!")
+  @Max(value = 999999999, message = "Please enter a valid phone number")
+  @Min(value = 100000000, message = "Please enter a valid phone number!")
   private Integer contact;
   private Status status;
   @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)

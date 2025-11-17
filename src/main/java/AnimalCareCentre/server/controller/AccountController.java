@@ -2,7 +2,6 @@ package AnimalCareCentre.server.controller;
 
 import java.util.Map;
 
-import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import AnimalCareCentre.server.model.*;
 import AnimalCareCentre.server.util.*;
+import jakarta.validation.Valid;
 import AnimalCareCentre.server.service.AccountService;
 
 @RestController
@@ -25,7 +25,6 @@ public class AccountController {
   private String adminSecretWord;
   private final AccountService accountService;
   private final ACCPasswordValidator passwordValidator = new ACCPasswordValidator();
-  private final EmailValidator emailValidator = EmailValidator.getInstance();
 
   public AccountController(AccountService accountService) {
     this.accountService = accountService;
@@ -57,19 +56,10 @@ public class AccountController {
   }
 
   @PostMapping("/create")
-  public ResponseEntity<?> createAccount(@RequestBody Account account, @RequestParam String secret) {
+  public ResponseEntity<?> createAccount(@Valid @RequestBody Account account, @RequestParam String secret) {
 
     if (!secret.equals(adminSecretWord)) {
       return ResponseEntity.status(403).body("Invalid admin secret word!");
-    }
-
-    if (account.getEmail() == null || account.getName() == null || account.getPassword() == null
-        || account.getSecurityQuestion() == null || account.getLocation() == null || account.getAnswer() == null) {
-      return ResponseEntity.badRequest().body("All fields are required!");
-    }
-
-    if (!emailValidator.isValid(account.getEmail())) {
-      return ResponseEntity.badRequest().body("Invalid email!");
     }
 
     String pwError = passwordValidator.validate(account.getPassword());

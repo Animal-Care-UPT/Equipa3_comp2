@@ -16,6 +16,10 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * This class describes the model of an Account.
@@ -30,12 +34,20 @@ public class Account {
   @Column(name = "account_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   protected long id;
+  @NotBlank(message = "Name is mandatory!")
   private String name;
+  @NotBlank(message = "Email is mandatory!")
+  @Email(message = "Please enter a valid email address")
   private String email;
+  @NotBlank(message = "Password is mandatory!")
+  @Size(min = 8, max = 16)
   private String password;
+  @NotBlank(message = "Location is mandatory!")
   private String location;
   @Enumerated(EnumType.STRING)
+  @NotNull(message = "Security Question is mandatory!")
   private SecurityQuestion securityQuestion;
+  @NotBlank(message = "Security Answer is mandatory!")
   private String answer;
   @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<LostAnimal> lostAnimals = new ArrayList<>();
