@@ -9,6 +9,9 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * This class describes the model of a User from the system, its attributes and
@@ -19,7 +22,11 @@ import jakarta.persistence.Table;
 @Table(name = "Users")
 public class User extends Account {
 
+  @Max(value = 999999999, message = "Please enter a valid phone number")
+  @Min(value = 100000000, message = "Please enter a valid phone number!")
+  @NotNull(message = "Contact is mandatory!")
   private Integer contact;
+  @NotNull(message = "Birthdate is mandatory!")
   private LocalDate birthDate;
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Adoption> adoptions;

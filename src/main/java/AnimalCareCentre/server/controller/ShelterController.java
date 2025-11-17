@@ -3,7 +3,6 @@ package AnimalCareCentre.server.controller;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +17,7 @@ import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.service.AccountService;
 import AnimalCareCentre.server.service.ShelterService;
 import AnimalCareCentre.server.util.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/shelters/")
@@ -26,7 +26,6 @@ public class ShelterController {
   private final ShelterService shelterService;
   private final AccountService accountService;
   private final ACCPasswordValidator passwordValidator = new ACCPasswordValidator();
-  private final EmailValidator emailValidator = EmailValidator.getInstance();
 
   public ShelterController(ShelterService shelterService, AccountService accountService) {
     this.shelterService = shelterService;
@@ -34,17 +33,7 @@ public class ShelterController {
   }
 
   @PostMapping("/create")
-  public ResponseEntity<?> createUser(@RequestBody Shelter shelter) {
-
-    if (shelter.getEmail() == null || shelter.getName() == null || shelter.getPassword() == null
-        || shelter.getSecurityQuestion() == null || shelter.getLocation() == null || shelter.getAnswer() == null
-        || shelter.getContact() == null || shelter.getFoundationYear() == null) {
-      return ResponseEntity.badRequest().body("All fields are required!");
-    }
-
-    if (!emailValidator.isValid(shelter.getEmail())) {
-      return ResponseEntity.badRequest().body("Invalid email!");
-    }
+  public ResponseEntity<?> createUser(@Valid @RequestBody Shelter shelter) {
 
     if (shelter.getFoundationYear() > LocalDate.now().getYear()) {
       return ResponseEntity.badRequest().body("Foundation year cannot be in the future!");
