@@ -37,7 +37,7 @@ public class Account {
   @NotBlank(message = "Name is mandatory!")
   private String name;
   @NotBlank(message = "Email is mandatory!")
-  @Email(message = "Please enter a valid email address")
+  @Email(message = "Please enter a valid email address!")
   private String email;
   @NotBlank(message = "Password is mandatory!")
   @Size(min = 8, max = 16)
