@@ -19,11 +19,6 @@ public class ShelterService {
     this.shelterRepository = shelterRepository;
   }
 
-    public Shelter findById(Long id) {
-
-      return shelterRepository.findById(id).orElse(null);
-    }
-
   public Shelter createShelter(Shelter shelter) {
     shelter.setPassword(ACCPasswordEncryption.encrypt(shelter.getPassword()));
     shelter.setStatus(Status.PENDING);
@@ -47,4 +42,8 @@ public class ShelterService {
   public List<Shelter> getShelters() {
     return shelterRepository.findAll();
   }
+
+  public Shelter findByShelterEmail(String email) {
+        return shelterRepository.findShelterByEmail(email);
+    }
 }
