@@ -128,4 +128,12 @@ public class ShelterAnimalController {
     return ResponseEntity.status(404).body("There are no animals available for adoption!");
   }
 
+  @PostMapping("/adopt")
+    public ResponseEntity<?> adoptAnimals(@Valid @RequestBody ShelterAnimal shelteranimal, @RequestParam AdoptionType adoptionType) {
+      ShelterAnimal adopted = shelterAnimalService.adopt(shelteranimal, adoptionType);
+      return ResponseEntity.status(202).body(adopted);
+  }
+
+
+
 }

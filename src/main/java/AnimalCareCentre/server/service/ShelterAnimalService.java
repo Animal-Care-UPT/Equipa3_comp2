@@ -6,6 +6,7 @@ import AnimalCareCentre.server.model.ShelterAnimal;
 
 import java.util.List;
 
+import AnimalCareCentre.server.util.ACCPasswordEncryption;
 import org.springframework.stereotype.Service;
 
 import AnimalCareCentre.server.repository.ShelterAnimalRepository;
@@ -55,6 +56,12 @@ public class ShelterAnimalService {
 
   public List<ShelterAnimal> searchAdoptionAnimals() {
     return shelterAnimalRepository.findByAdoptionTypeAndStatus(AdoptionType.FOR_ADOPTION, Status.AVAILABLE);
+  }
+
+  public ShelterAnimal adopt(ShelterAnimal shelterAnimal, AdoptionType adoptionType) {
+      shelterAnimal.setAdoptionType(adoptionType);
+      shelterAnimal.setStatus(Status.PENDING);
+      return shelterAnimalRepository.save(shelterAnimal);
   }
 
 }
