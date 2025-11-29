@@ -2,6 +2,7 @@ package AnimalCareCentre.client;
 
 import java.awt.Toolkit;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import AnimalCareCentre.client.views.*;
 import AnimalCareCentre.server.enums.SecurityQuestion;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -66,6 +68,44 @@ public class App extends Application {
    * This method shows the login screen
    */
   public void login() {
+    ACCScene scene = new ACCScene(stage, new ACCVBox());
+    Label emailLabel = new Label("Email:");
+    TextField email = new TextField();
+    email.setMaxWidth(250);
+    Label passLabel = new Label("Password:");
+    PasswordField password = new PasswordField();
+    password.setMaxWidth(250);
+    Button enter = new Button("Enter");
+    Button back = new Button("Back");
+    Button changePassword = new Button("Forgot Password");
+    scene.addItems(emailLabel, email, passLabel, password, enter, back, changePassword);
+
+    enter.setOnAction(e -> {
+      String json = jsonString("email", email.getText(), "password", password.getText());
+
+      ApiResponse response = ApiClient.post("/accounts/login", json);
+
+      if (!response.isSuccess()) {
+        showAlert(AlertType.ERROR, "Error", response.getBody());
+        return;
+      }
+
+      if (response.getBody().equals("ROLE_USER")) {
+        userHomepage();
+      } else if (response.getBody().equals("ROLE_SHELTER")) {
+        shelterHomepage();
+      } else {
+        adminHomepage();
+      }
+    });
+
+    back.setOnAction(e -> {
+      showMainMenu();
+    });
+
+    changePassword.setOnAction(e -> {
+      // changePassword();
+    });
 
   }
 
@@ -222,6 +262,246 @@ public class App extends Application {
   }
 
   /**
+   * This method shows shelter's homepage
+   */
+  private void shelterHomepage() {
+    javafx.application.Platform.runLater(() -> showTerminalScreen());
+
+    try {
+      if (consoleThread != null && consoleThread.isAlive()) {
+        consoleThread.interrupt();
+      }
+      consoleThread = new Thread(() -> {
+        System.out.println("=== SHELTER MENU ===");
+        System.out.println("1. Register Animal");
+        System.out.println("2. View My Animals");
+        System.out.println("3. View Pending Adoption Requests");
+        System.out.println("4. View Pending Foster Requests");
+        System.out.println("5. View Adoptions");
+        System.out.println("6. View Fosters");
+        System.out.println("0. Logout");
+        System.out.print("Option: ");
+        int option = readInt();
+
+        switch (option) {
+          case 1 -> {
+            shelterHomepage();
+            return;
+          }
+
+          case 2 -> {
+            shelterHomepage();
+            return;
+          }
+
+          case 3 -> {
+            shelterHomepage();
+            return;
+          }
+
+          case 4 -> {
+            shelterHomepage();
+            return;
+          }
+
+          case 5 -> {
+            shelterHomepage();
+            return;
+          }
+
+          case 6 -> {
+            shelterHomepage();
+            return;
+          }
+
+          case 0 -> {
+            System.out.println("Exiting terminal menu...");
+            javafx.application.Platform.runLater(this::showMainMenu);
+          }
+
+          default -> {
+            System.out.println("Invalid option!");
+            shelterHomepage();
+            return;
+          }
+        }
+
+      });
+      consoleThread.start();
+
+    } catch (InputMismatchException e) {
+      System.out.println("Please pick a valid option!");
+      shelterHomepage();
+    }
+  }
+
+  /**
+   * This method shows User's homepage
+   */
+  private void userHomepage() {
+    javafx.application.Platform.runLater(() -> showTerminalScreen());
+
+    try {
+
+      if (consoleThread != null && consoleThread.isAlive()) {
+        consoleThread.interrupt();
+      }
+      consoleThread = new Thread(() -> {
+        int option;
+
+        System.out.println("=== USER MENU ===");
+        System.out.println("1. Search Animal");
+        System.out.println("2. Search Shelter");
+        System.out.println("3. See My Adoptions Requests");
+        System.out.println("4. See My Foster Requests");
+        System.out.println("5. Lost and Found");
+        System.out.println("0. Logout");
+        System.out.print("Option: ");
+        option = readInt();
+
+        switch (option) {
+          case 1 -> {
+            // searchAnimalMenu();
+            userHomepage();
+            return;
+          }
+
+          case 2 -> {
+            // searchShelter();
+            userHomepage();
+            return;
+          }
+
+          case 3 -> {
+            userHomepage();
+            return;
+          }
+
+          case 4 -> {
+            userHomepage();
+            return;
+          }
+
+          case 5 -> {
+            // lostAndFoundMenu();
+            userHomepage();
+            return;
+          }
+
+          case 0 -> {
+            System.out.println("Exiting terminal menu...");
+            Platform.runLater(() -> showMainMenu());
+            return;
+          }
+          default -> System.out.println("Invalid option!");
+        }
+      });
+      consoleThread.start();
+
+    } catch (InputMismatchException e) {
+      System.out.println("Please pick a valid option!");
+      userHomepage();
+    }
+  }
+
+  /**
+   * This method shows admin's homepage
+   */
+  private void adminHomepage() {
+    javafx.application.Platform.runLater(() -> showTerminalScreen());
+
+    try {
+
+      if (consoleThread != null && consoleThread.isAlive()) {
+        consoleThread.interrupt();
+      }
+      consoleThread = new Thread(() -> {
+        int option;
+
+        System.out.println("=== ADMIN MENU ===");
+        System.out.println("1. View Shelter Requests");
+        System.out.println("2. View Available Shelters");
+        System.out.println("3. View All Sponsorships");
+        System.out.println("4. View All Animals");
+        System.out.println("5. View All Adoptions");
+        System.out.println("6. View All Fosters");
+        System.out.println("7 Lost and Found");
+        System.out.println("0. Logout");
+        System.out.print("Option: ");
+        option = readInt();
+
+        switch (option) {
+          case 1 -> {
+            adminHomepage();
+            return;
+          }
+
+          case 2 -> {
+            adminHomepage();
+            return;
+          }
+
+          case 3 -> {
+            adminHomepage();
+            return;
+          }
+
+          case 4 -> {
+            adminHomepage();
+            return;
+          }
+
+          case 5 -> {
+            adminHomepage();
+            return;
+          }
+
+          case 6 -> {
+            adminHomepage();
+            return;
+          }
+
+          case 7 -> {
+            // lostAndFoundMenu();
+            adminHomepage();
+            return;
+          }
+
+          case 0 -> {
+            System.out.println("Exiting terminal menu...");
+            Platform.runLater(() -> showMainMenu());
+            return;
+          }
+          default -> System.out.println("Invalid option!");
+        }
+      });
+      consoleThread.start();
+
+    } catch (InputMismatchException e) {
+      System.out.println("Please pick a valid option!");
+      userHomepage();
+    }
+  }
+
+  /**
+   * This method is used temporarily to change to the terminal screen
+   */
+  private void showTerminalScreen() {
+    ACCScene scene = new ACCScene(stage, new ACCVBox());
+    Button logout = new Button("Logout");
+    logout.setStyle("-fx-background-color: #333333; -fx-text-fill: white; -fx-font-size: 16px;");
+    scene.addItems(logout);
+
+    logout.setOnAction(e -> {
+      ApiResponse response = ApiClient.post("/accounts/logout", "");
+      System.out.println(response.getBody());
+      showMainMenu();
+      return;
+    });
+
+  }
+
+  /**
    * This method shows an alert
    */
   public void showAlert(AlertType type, String title, String text) {
@@ -250,6 +530,28 @@ public class App extends Application {
     } catch (Exception e) {
       e.printStackTrace();
       return null;
+    }
+  }
+
+  private int readInt() {
+    synchronized (sc) {
+      int value = sc.nextInt();
+      sc.nextLine();
+      return value;
+    }
+  }
+
+  private String readLine() {
+    synchronized (sc) {
+      return sc.nextLine();
+    }
+  }
+
+  private float readFloat() {
+    synchronized (sc) {
+      float value = sc.nextFloat();
+      sc.nextLine();
+      return value;
     }
   }
 
