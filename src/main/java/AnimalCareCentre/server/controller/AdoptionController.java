@@ -78,7 +78,9 @@ public class AdoptionController {
     // User historic
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/user/adoptions")
-    public ResponseEntity<?> userAdoptions(@RequestParam String email) {
+    public ResponseEntity<?> userAdoptions() {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User user = userService.findByEmail(email);
         if (user == null) {
@@ -87,9 +89,9 @@ public class AdoptionController {
 
         List<AdoptionsUserDTO> userAdoptions = adoptionService.getUserAdoptions(user);
 
-        // 200 – OK
         return ResponseEntity.ok(userAdoptions);
     }
+
 
 }
 

@@ -70,9 +70,19 @@ public class AdoptionService {
             dto.setAdoptionType(a.getType());
             dto.setStatus(a.getStatus());
             dto.setRequestDate(a.getRequestDate());
+
+            // In case the adoption request has been accepted
+            if (a.getStatus() == Status.ACCEPTED) {
+                dto.setAdoptionDate(a.getAdoptionDate());
+            }
+
             return dto;
         }).toList();
     }
+
+
+
+
 
     //So the shelters can see their pending requests
     public List<AdoptionResponseDTO> getPendingRequestsByShelter(Long shelterId) {
