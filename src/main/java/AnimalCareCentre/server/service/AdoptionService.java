@@ -2,6 +2,7 @@ package AnimalCareCentre.server.service;
 
 import AnimalCareCentre.server.dto.AdoptionRequestDTO;
 import AnimalCareCentre.server.dto.AdoptionResponseDTO;
+import AnimalCareCentre.server.dto.AdoptionsUserDTO;
 import AnimalCareCentre.server.enums.AdoptionType;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import AnimalCareCentre.server.model.User;
 import AnimalCareCentre.server.enums.Status;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,13 +22,16 @@ public class AdoptionService {
 
   private final AdoptionRepository adoptionRepository;
     private final ShelterAnimalService shelterAnimalService;
+    private final UserService userService;
 
-    public AdoptionService(AdoptionRepository adoptionRepository, ShelterAnimalService shelterAnimalService) {
+    public AdoptionService(AdoptionRepository adoptionRepository, ShelterAnimalService shelterAnimalService, UserService userService) {
     this.adoptionRepository = adoptionRepository;
         this.shelterAnimalService = shelterAnimalService;
+        this.userService = userService;
     }
 
 
+    //To make an adoption
     public Adoption requestAdoption(User user, Long animalId, AdoptionType adoptionType) {
         ShelterAnimal animal = shelterAnimalService.findByShelterAnimalById(animalId);
         Adoption adoption = new Adoption();
@@ -52,8 +57,21 @@ public class AdoptionService {
         animal.setAdoptionType(AdoptionType.NOT_AVAILABLE);
     }
 
-    public List<Adoption> getUserAdoptions(User user) {
-        return adoptionRepository.findByUser(user);
+    //So the users can see their adoptions request historic
+    public List<AdoptionsUserDTO> getUserAdoptions(User user) {
+
+        List<Adoption> adoptions = adoptionRepository.findByUser(user);
+
+        return adoptions.stream().map(a -> {
+            AdoptionsUserDTO dto = new AdoptionsUserDTO();
+            dto.setAdoptionId(a.getId());
+            dto.setAnimalId(a.getAnimal().getId());
+            dto.setAnimalName(a.getAnimal().getName());
+            dto.setAdoptionType(a.getType());
+            dto.setStatus(a.getStatus());
+            dto.setRequestDate(a.getRequestDate());
+            return dto;
+        }).toList();
     }
 
     //So the shelters can see their pending requests

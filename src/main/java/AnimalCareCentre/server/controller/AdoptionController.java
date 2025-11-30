@@ -2,6 +2,7 @@ package AnimalCareCentre.server.controller;
 
 import AnimalCareCentre.server.dto.AdoptionRequestDTO;
 import AnimalCareCentre.server.dto.AdoptionResponseDTO;
+import AnimalCareCentre.server.dto.AdoptionsUserDTO;
 import AnimalCareCentre.server.model.Adoption;
 import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.model.ShelterAnimal;
@@ -68,23 +69,26 @@ public class AdoptionController {
 
 
     // Pedidos pendentes de um shelter
+    @PreAuthorize("hasRole('SHELTER')")
     @GetMapping("/pending")
     public List<AdoptionResponseDTO> pendingRequests(@RequestParam Long shelterId) {
         return adoptionService.getPendingRequestsByShelter(shelterId); //spring return automatically the 200 ok
     }
 
-
+    // User historic
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/user/adoptions")
     public ResponseEntity<?> userAdoptions(@RequestParam String email) {
-        User user = userService.findByEmail(email);
 
+        User user = userService.findByEmail(email);
         if (user == null) {
-            return ResponseEntity.status(404).body("That Id doesn't correspond to any user!");
+            return ResponseEntity.status(404).body("User not found!");
         }
 
-        List<Adoption> userAdoptions = adoptionService.getUserAdoptions(user);
+        List<AdoptionsUserDTO> userAdoptions = adoptionService.getUserAdoptions(user);
 
-        return ResponseEntity.ok().body(userAdoptions);
+        // 200 – OK
+        return ResponseEntity.ok(userAdoptions);
     }
 
 }
