@@ -26,4 +26,8 @@ public class SponsorshipService {
   public List<Sponsorship> searchAll(){
     return sponsorshipRepository.findAll(); 
   }
+  
+  public List<Sponsorship> searchSponsorshipsUser(User user){
+    return sponsorshipRepository.findByUser(user);      
+  } 
 }
