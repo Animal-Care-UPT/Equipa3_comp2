@@ -566,7 +566,72 @@ public class App extends Application {
 
     });
     consoleThread.start();
+  }
 
+  /**
+   * This method shows a shelter's animals
+   */
+  public void showShelterAnimals(Shelter shelter) {
+    System.out.println(shelter);
+    System.out.println("Animals: ");
+    ApiResponse response = ApiClient.get("/shelteranimals/search/shelter/available?id=" + shelter.id());
+    List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
+    ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(), "Animal");
+    if (choice == null) {
+      javafx.application.Platform.runLater(this::userHomepage);
+      return;
+    }
+    showAnimal(choice);
+  }
+
+  /**
+   * This method shows a shelter's profile
+   *
+   */
+  public void showShelter(Shelter shelter) {
+    System.out.println(shelter);
+    System.out.println("\n");
+    String[] options = { "Donate to Shelter", "View Shelter Animals" };
+    String opt = (String) chooseOption(options, "Search Option");
+    if (opt == null) {
+      Platform.runLater(this::userHomepage);
+      return;
+    }
+
+    switch (opt) {
+      case "Donate to Shelter" -> {
+        // donation stuff
+        showShelter(shelter);
+        return;
+      }
+
+      case "View Shelter Animals" -> {
+        showShelterAnimals(shelter);
+        return;
+      }
+
+      default -> {
+        System.out.println("Invalid option!");
+        showShelter(shelter);
+        return;
+      }
+    }
+  }
+
+  /**
+   * This method displays all the available shelters
+   */
+  public void searchShelter() {
+
+    ApiResponse response = ApiClient.get("/shelters/");
+    List<Shelter> shelters = parseList(response.getBody(), Shelter.class);
+
+    Shelter choice = (Shelter) chooseOption(shelters.toArray(), "Shelter");
+    if (choice == null) {
+      javafx.application.Platform.runLater(this::userHomepage);
+      return;
+    }
+    showShelter(choice);
   }
 
   /**
@@ -598,8 +663,7 @@ public class App extends Application {
         }
 
         case 2 -> {
-          // searchShelter();
-          userHomepage();
+          searchShelter();
           return;
         }
 
