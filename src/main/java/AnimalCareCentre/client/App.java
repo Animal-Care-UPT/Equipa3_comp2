@@ -37,7 +37,6 @@ public class App extends Application {
   private static Stage stage;
   private static Scanner sc = new Scanner(System.in);
   private Thread consoleThread;
-  private static String loggedRole;
   private static final ObjectMapper mapper = new ObjectMapper()
       .registerModule(new JavaTimeModule())
       .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -101,11 +100,9 @@ public class App extends Application {
         return;
       }
 
-      loggedRole = response.getBody();
-
-      if (loggedRole.equals("ROLE_USER")) {
+      if (response.getBody().equals("ROLE_USER")) {
         userHomepage();
-      } else if (loggedRole.equals("ROLE_SHELTER")) {
+      } else if (response.getBody().equals("ROLE_SHELTER")) {
         shelterHomepage();
       } else {
         adminHomepage();
@@ -436,6 +433,50 @@ public class App extends Application {
         }
 
         ApiResponse response = ApiClient.get("/shelteranimals/search/size?size=" + chosenType.name());
+
+        if (response.isSuccess()) {
+
+          List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
+
+          ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(),
+              "Animal");
+          if (choice == null) {
+            javafx.application.Platform.runLater(this::userHomepage);
+            return;
+          }
+          showAnimal(choice);
+        } else {
+          System.out.println(response.getBody());
+          searchAnimalMenu();
+
+        }
+      }
+
+      case "Search Animals for Adoption" -> {
+
+        ApiResponse response = ApiClient.get("/shelteranimals/search/adoption");
+
+        if (response.isSuccess()) {
+
+          List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
+
+          ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(),
+              "Animal");
+          if (choice == null) {
+            javafx.application.Platform.runLater(this::userHomepage);
+            return;
+          }
+          showAnimal(choice);
+        } else {
+          System.out.println(response.getBody());
+          searchAnimalMenu();
+
+        }
+      }
+
+      case "Search Animals for Foster" -> {
+
+        ApiResponse response = ApiClient.get("/shelteranimals/search/foster");
 
         if (response.isSuccess()) {
 
