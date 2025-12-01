@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import AnimalCareCentre.client.views.*;
-import AnimalCareCentre.server.enums.AnimalType;
-import AnimalCareCentre.server.enums.SecurityQuestion;
+import AnimalCareCentre.client.enums.*;
+import AnimalCareCentre.client.records.*;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
