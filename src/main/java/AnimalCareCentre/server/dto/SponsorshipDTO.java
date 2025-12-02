@@ -7,7 +7,11 @@ public class SponsorshipDTO {
 
   private User user;
   @NotNull
-  private ShelterAnimal animal;
+  private Long animalId;
+
+  @NotNull
+  private String animalName;
+
   @NotNull
   private Float amount;
 
@@ -19,12 +23,20 @@ public class SponsorshipDTO {
     this.user = user;
   }
 
-  public ShelterAnimal getAnimal() {
-    return animal;
+  public Long getAnimalId() {
+    return animalId;
   }
 
-  public void setAnimal(ShelterAnimal animal) {
-    this.animal = animal;
+  public void setAnimalId(Long animalId) {
+    this.animalId = animalId;
+  }
+
+  public String getAnimalName() {
+    return animalName;
+  }
+
+  public void setAnimalName(String animalName) {
+    this.animalName = animalName;
   }
 
   public Float getAmount() {

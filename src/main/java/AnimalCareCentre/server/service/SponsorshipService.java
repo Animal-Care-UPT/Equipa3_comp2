@@ -35,7 +35,8 @@ public class SponsorshipService {
     return sponsors.stream().map(a -> {
       SponsorshipDTO dto = new SponsorshipDTO();
       dto.setUser(a.getUser());
-      dto.setAnimal(a.getAnimal());
+      dto.setAnimalName(a.getAnimal().getName());
+      dto.setAnimalId(a.getAnimal().getId());
       dto.setAmount(a.getAmount());
       return dto;
     }).toList();

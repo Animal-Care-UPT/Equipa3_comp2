@@ -3,6 +3,8 @@ package AnimalCareCentre.server.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import AnimalCareCentre.server.enums.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -17,22 +19,19 @@ public class ShelterAnimal extends Animal {
   @ManyToOne
   @JoinColumn(name = "shelter_id")
   private Shelter shelter;
-
   private boolean isVacinated;
-
   @NotNull
   private Integer age;
-
   @Enumerated(EnumType.STRING)
   private Status status;
-
   @Enumerated(EnumType.STRING)
   @NotNull(message = "Adoption Type is required!")
   private AdoptionType adoptionType;
-
   @OneToMany(mappedBy = "animal")
+  @JsonManagedReference("animal-adoptions")
   List<Adoption> adoptions = new ArrayList<>();
   @OneToMany(mappedBy = "animal", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference("animal-sponsorships")
   List<Sponsorship> sponsors = new ArrayList<>();
 
   public ShelterAnimal() {

@@ -4,9 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.checkerframework.checker.units.qual.min;
-import org.springframework.beans.factory.annotation.Value;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,17 +33,24 @@ public class Sponsorship {
   @Column(name = "Sponsorship_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
   @ManyToOne
   @JoinColumn(name = "user_id")
+  @JsonBackReference("user-sponsorships")
   private User user;
+
   @ManyToOne
   @JoinColumn(name = "animal_id")
+  @JsonBackReference("animal-sponsorships")
   private ShelterAnimal animal;
+
   private LocalDate startDate;
+
   @Min(5)
   @Max(1000)
   @NotNull(message = "The amount is mandatory")
   private Float amount;
+
   @OneToMany(mappedBy = "sponsorship", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Donation> donations = new ArrayList<>();
 
@@ -68,14 +73,15 @@ public class Sponsorship {
 
   @Override
   public String toString() {
-    return "\nUser: " + user.getName() + "\nStart date: " + startDate + "\nAmount: " + amount + "\nAnimal: " + animal.getName() + "\nShelter: " + animal.getShelter().getName();
+    return "\nUser: " + user.getName() + "\nStart date: " + startDate + "\nAmount: " + amount + "\nAnimal: "
+        + animal.getName() + "\nShelter: " + animal.getShelter().getName();
   }
 
-    public float getAmount() {
-        return amount;
-    }
+  public float getAmount() {
+    return amount;
+  }
 
-    public void setId(long id) {
+  public void setId(long id) {
     this.id = id;
   }
 

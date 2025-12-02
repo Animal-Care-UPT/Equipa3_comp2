@@ -40,7 +40,7 @@ public class SponsorshipController {
   public ResponseEntity<?> createSponsorShip(@Valid @RequestBody SponsorshipDTO sponsorship) {
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
     User user = userService.findByEmail(email);
-    ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(sponsorship.getAnimal().getId());
+    ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(sponsorship.getAnimalId());
     Float amount = sponsorship.getAmount();
     if (animal.getSponsors().size() >= 3) {
       return ResponseEntity.status(409).body("The animal already has 3 sponsors");
