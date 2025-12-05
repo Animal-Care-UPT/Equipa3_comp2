@@ -14,6 +14,7 @@ public class NavBar {
 
   public NavBar(String loggedRole, Navigator nav, ACCScene scene) {
     this.nav = nav;
+    this.scene = scene;
 
     if (loggedRole.equals("ROLE_USER")) {
       userNavButtons();

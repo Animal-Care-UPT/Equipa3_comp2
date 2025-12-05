@@ -2,7 +2,10 @@ package AnimalCareCentre.client;
 
 import java.awt.Toolkit;
 
+import AnimalCareCentre.client.views.AdminHomepage;
 import AnimalCareCentre.client.views.MainMenu;
+import AnimalCareCentre.client.views.ShelterHomepage;
+import AnimalCareCentre.client.views.UserHomepage;
 import javafx.stage.Stage;
 
 /**
@@ -30,15 +33,15 @@ public class Navigator {
   }
 
   public void shelterHomepage() {
-
+    new ShelterHomepage(this, stage);
   }
 
   public void userHomepage() {
-
+    new UserHomepage(this, stage);
   }
 
   public void adminHomepage() {
-
+    new AdminHomepage(this, stage);
   }
 
   public void setLoggedRole(String role) {
